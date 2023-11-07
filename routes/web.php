@@ -22,4 +22,4 @@ Route::get('/', function () {
 // Authentication routes
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::get('/registration', [RegistrationController::class, 'index'])->name('registration');
-Route::post('/registration', [RegistrationController::class, 'register'])->name('register.store');
+Route::post('/store', [RegistrationController::class, 'register'])->name('register.store');

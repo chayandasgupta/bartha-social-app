@@ -16,8 +16,9 @@
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
     <form
       class="space-y-6"
-      action="#"
+      action="{{ route('register.store') }}"
       method="POST">
+      @csrf
       <!-- Name -->
       <div>
         <label
@@ -47,7 +48,7 @@
         <div class="mt-2">
           <input
             id="username"
-            name="username"
+            name="user_name"
             type="text"
             autocomplete="username"
             placeholder="alparslan1029"
