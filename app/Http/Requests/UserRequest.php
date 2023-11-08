@@ -20,12 +20,22 @@ class UserRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            'name'      => 'required',
-            'user_name' => 'required',
-            'email'     => 'required|email|unique:users',
-            'password'  => 'required|min:6'
-        ];
+    {    
+        $isLogin = $this->is('login');
+
+        if($isLogin) {
+            return [
+                'email'     => 'required',
+                'password'  => 'required'
+            ];
+        } else {
+            return [
+                'name'      => 'required',
+                'user_name' => 'required|unique:users',
+                'email'     => 'required|email|unique:users',
+                'password'  => 'required|min:6'
+            ];
+        }
+        
     }
 }

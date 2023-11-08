@@ -68,8 +68,14 @@
                 tabindex="-1" id="user-menu-item-0">Your Profile</a>
               <a href="./edit-profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 role="menuitem" tabindex="-1" id="user-menu-item-1">Edit Profile</a>
-              <a href="{{route('login')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
-                tabindex="-1" id="user-menu-item-2">Sign in</a>
+                @auth
+                  <a href="{{ route('logout') }}"
+                  class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">Sign
+                  Out</a>
+                @else
+                  <a href="{{route('login')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"
+                  tabindex="-1" id="user-menu-item-2">Sign in</a>
+                @endauth
             </div>
           </div>
         </div>
@@ -130,9 +136,19 @@
           <a href="./edit-profile.html"
             class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">Edit
             Profile</a>
-          <a href="#"
-            class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">Sign
-            in</a>
+            @auth
+           
+              <a href="{{ route('logout') }}"
+              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign
+              Out</a>
+              <form action="{{route('logout')}}" method="POST" class="hidden">
+                @csrf
+              </form> 
+            @else
+              <a href="#"
+              class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">Sign
+              in</a>
+            @endauth
         </div>
       </div>
     </div>
