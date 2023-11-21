@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('uuid');
             $table->longtext('description');
             $table->foreignId('user_id')->constrained();
-            $table->bigInteger('view_count');
-            $table->string('image');
+            $table->bigInteger('view_count')->default(0);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,9 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/{user_name}/profile', 'editProfile')->name('profile.edit');
     Route::put('/user/{id}', 'updateProfile')->name('profile.update');
 });
+
+
+// Post routes
+Route::resource('post', PostController::class)->except([
+    'index'
+]);;

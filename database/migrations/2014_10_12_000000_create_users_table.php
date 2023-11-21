@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('image');
-            $table->text('bio');
-            $table->boolean('is_blocked');
-            $table->string('uuid');
+            $table->string('image')->nullable();
+            $table->text('bio')->nullable();
+            $table->boolean('is_blocked')->default(0);
+            $table->string('uuid')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
