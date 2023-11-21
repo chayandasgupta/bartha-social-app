@@ -16,7 +16,7 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
-    if(Auth::check()) { 
+    if (Auth::check()) {
         return view('index');
     } else {
         return redirect('login');
@@ -33,7 +33,7 @@ Route::post('/store', [RegistrationController::class, 'register'])->name('regist
 
 
 // User routes
-Route::controller(UserController::class)->group(function() {
+Route::controller(UserController::class)->group(function () {
     Route::get('/{user_name}', 'showProfile')->name('profile.show');
     Route::get('/{user_name}/profile', 'editProfile')->name('profile.edit');
     Route::put('/user/{id}', 'updateProfile')->name('profile.update');
