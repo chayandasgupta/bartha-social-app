@@ -73,13 +73,8 @@ class PostController extends Controller
             ->where('uuid', $id)
             ->update($postData);
 
-        if ($postUpdate) {
-            flash('Post updated successfully');
-            return redirect()->route('home');
-        } else {
-            flash()->addWarning('Something went wrong.');
-            return back();
-        }
+        flash('Post updated successfully');
+        return redirect()->route('home');
     }
 
     /**

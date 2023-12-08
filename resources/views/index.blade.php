@@ -136,14 +136,16 @@
                               tabindex="-1"
                               id="user-menu-item-0"
                       >Edit</a>
-                      <a href="javascript:void(0)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                      tabindex="-1"
-                      id="user-menu-item-1" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Delete</a>
-                      <form id="delete-form" action="{{ route('post.destroy', $post->uuid) }}" method="post" style="display: none;">
+                      
+                      <form id="de-form-{{ $post->uuid }}" type="submit" action="{{ route('post.destroy', $post->uuid) }}" method="post">
                         @csrf
                         @method('DELETE')
                       </form>
+                     
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                      tabindex="-1"
+                      id="user-menu-item-1" onclick="event.preventDefault(); document.getElementById('de-form-{{ $post->uuid }}').submit();">Delete</a>
               </div>
             @endif
             
