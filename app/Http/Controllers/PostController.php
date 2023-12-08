@@ -40,7 +40,7 @@ class PostController extends Controller
             flash('Post created successfully');
             return back();
         } else {
-            flash('Something went wrong');
+            flash()->addWarning('Something went wrong.');
             return back();
         }
     }
@@ -50,7 +50,8 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $post = DB::table('posts')->where('uuid', $id)->first();
+        return view('frontend.posts.edit', compact('post'));
     }
 
     /**
@@ -58,15 +59,27 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $post = DB::table('posts')->where('uuid', $id)->first();
+        return view('frontend.posts.edit', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StorePostRequest $request, string $id)
     {
-        //
+        $postData = $request->validated();
+        $postUpdate = DB::table('posts')
+            ->where('uuid', $id)
+            ->update($postData);
+
+        if ($postUpdate) {
+            flash('Post updated successfully');
+            return redirect()->route('home');
+        } else {
+            flash()->addWarning('Something went wrong.');
+            return back();
+        }
     }
 
     /**
@@ -79,7 +92,7 @@ class PostController extends Controller
             flash('Post deleted successfully');
             return back();
         } else {
-            flash('Something went wrong');
+            flash()->addWarning('Something went wrong.');
             return back();
         }
     }
