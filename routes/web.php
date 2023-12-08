@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegistrationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 /*
@@ -16,13 +17,15 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        return view('index');
-    } else {
-        return redirect('login');
-    }
-})->name('home');
+// Route::get('/', function () {
+//     if (Auth::check()) {
+//         return view('index');
+//     } else {
+//         return redirect('login');
+//     }
+// })-;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 // Authentication routes
@@ -42,6 +45,4 @@ Route::controller(UserController::class)->group(function () {
 
 
 // Post routes
-Route::resource('post', PostController::class)->except([
-    'index'
-]);;
+Route::resource('post', PostController::class);

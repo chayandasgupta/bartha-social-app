@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        // return view('index', compact('posts'));
     }
 
     /**
@@ -35,6 +35,14 @@ class PostController extends Controller
         $postData['user_id'] = Auth::user()->id;
         $postData['uuid'] = Str::uuid();
         $post = DB::table('posts')->insert($postData);
+
+        if ($post) {
+            flash('Post created successfully');
+            return back();
+        } else {
+            flash('Something went wrong');
+            return back();
+        }
     }
 
     /**
@@ -66,6 +74,13 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $deletePost = DB::table('posts')->where('uuid', $id)->delete();
+        if ($deletePost) {
+            flash('Post deleted successfully');
+            return back();
+        } else {
+            flash('Something went wrong');
+            return back();
+        }
     }
 }
