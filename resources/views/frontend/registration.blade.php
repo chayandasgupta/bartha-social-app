@@ -16,8 +16,9 @@
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
     <form
       class="space-y-6"
-      action="#"
+      action="{{ route('register.store') }}"
       method="POST">
+      @csrf
       <!-- Name -->
       <div>
         <label
@@ -33,7 +34,11 @@
             autocomplete="name"
             placeholder="Alp Arslan"
             required
+            value="{{ old('name') }}"
             class="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+            @error('name')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
       </div>
 
@@ -47,12 +52,16 @@
         <div class="mt-2">
           <input
             id="username"
-            name="username"
+            name="user_name"
             type="text"
             autocomplete="username"
             placeholder="alparslan1029"
             required
+            value="{{ old('user_name') }}"
             class="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+            @error('user_name')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
       </div>
 
@@ -71,7 +80,11 @@
             autocomplete="email"
             placeholder="alp.arslan@mail.com"
             required
+            value="{{ old('email') }}"
             class="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+            @error('email')
+              <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
       </div>
 
@@ -91,6 +104,9 @@
             placeholder="••••••••"
             required
             class="block w-full rounded-md border-0 p-2 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black sm:text-sm sm:leading-6" />
+            @error('password')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
         </div>
       </div>
 
@@ -106,7 +122,7 @@
     <p class="mt-10 text-center text-sm text-gray-500">
       Already a member?
       <a
-        href="./login.html"
+        href="{{route('login')}}"
         class="font-semibold leading-6 text-black hover:text-black"
         >Sign In</a
       >
