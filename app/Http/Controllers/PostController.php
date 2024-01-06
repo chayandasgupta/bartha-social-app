@@ -15,7 +15,6 @@ class PostController extends Controller
      */
     public function index()
     {
-        // return view('index', compact('posts'));
     }
 
     /**
@@ -38,11 +37,11 @@ class PostController extends Controller
 
         if ($post) {
             flash('Post created successfully');
-            return back();
         } else {
             flash()->addWarning('Something went wrong.');
-            return back();
         }
+
+        return back();
     }
 
     /**
@@ -73,7 +72,12 @@ class PostController extends Controller
             ->where('uuid', $id)
             ->update($postData);
 
-        flash('Post updated successfully');
+        if ($postUpdate) {
+            flash('Post updated successfully');
+        } else {
+            flash('Post updated failed');
+        }
+
         return redirect()->route('home');
     }
 
@@ -82,13 +86,15 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        $deletePost = DB::table('posts')->where('uuid', $id)->delete();
+        $deletePost = DB::table('posts')
+            ->where('uuid', $id)
+            ->delete();
+
         if ($deletePost) {
             flash('Post deleted successfully');
-            return back();
         } else {
             flash()->addWarning('Something went wrong.');
-            return back();
         }
+        return back();
     }
 }

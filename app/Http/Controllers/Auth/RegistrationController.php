@@ -15,11 +15,12 @@ class RegistrationController extends Controller
   }
 
   public function register(UserRequest $request)
-  { 
+  {
+    dd('dsd');
     $requestedUserData             = $request->validated();
     $requestedUserData['password'] = Hash::make($request->password);
     User::create($requestedUserData);
-    
+
     flash('Registration successfully.');
     return redirect()->route('login');
   }

@@ -8,8 +8,8 @@
     <div class="flex items-start /space-x-3/">
       {{-- User Avatar  --}}
       <div class="flex-shrink-0">
-        <img class="h-10 w-10 rounded-full object-cover" src="https://avatars.githubusercontent.com/u/831997"
-          alt="Ahmed Shamim" />
+        <img class="h-10 w-10 rounded-full object-cover" src="https://avatars.githubusercontent.com/u/55105548"
+          alt="Chayan" />
       </div>
       {{-- /User Avatar  --}}
 
@@ -82,19 +82,19 @@
           <div class="flex-shrink-0">
             <img
               class="h-10 w-10 rounded-full object-cover"
-              src="https://avatars.githubusercontent.com/u/61485238"
-              alt="Al Nahian" />
+              src="https://avatars.githubusercontent.com/u/55105548"
+              alt="Chayan" />
           </div>
 
           <div class="text-gray-900 flex flex-col min-w-0 flex-1">
             <a
-              href="https://github.com/alnahian2003"
+              href="{{route('profile.show', $post->uuid)}}"
               class="hover:underline font-semibold line-clamp-1">
-                {{$post->name ?? ''}}
+                {{$post->name ?? ''}} 
             </a>
 
             <a
-              href="https://twitter.com/alnahian2003"
+            href="{{route('profile.show', $post->uuid)}}"
               class="hover:underline text-sm text-gray-500 line-clamp-1">
               {{'@'.$post->user_name ?? ''}}
             </a>
@@ -131,21 +131,21 @@
               aria-orientation="vertical"
               aria-labelledby="user-menu-button"
               tabindex="-1">
-                      <a href="{{ route('post.edit', $post->uuid) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              role="menuitem"
-                              tabindex="-1"
-                              id="user-menu-item-0"
-                      >Edit</a>
-                      
-                      <form id="de-form-{{ $post->uuid }}" type="submit" action="{{ route('post.destroy', $post->uuid) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                      </form>
-                     
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                      tabindex="-1"
-                      id="user-menu-item-1" onclick="event.preventDefault(); document.getElementById('de-form-{{ $post->uuid }}').submit();">Delete</a>
+                  <a href="{{ route('post.edit', $post->uuid) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          role="menuitem"
+                          tabindex="-1"
+                          id="user-menu-item-0"
+                  >Edit</a>
+                  
+                  <form id="de-form-{{ $post->uuid }}" type="submit" action="{{ route('post.destroy', $post->uuid) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                  </form>
+                  
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                  tabindex="-1"
+                  id="user-menu-item-1" onclick="event.preventDefault(); document.getElementById('de-form-{{ $post->uuid }}').submit();">Delete</a>
               </div>
             @endif
             
