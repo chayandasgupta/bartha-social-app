@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+
 class UserRequest extends FormRequest
 {
     /**
@@ -20,11 +21,11 @@ class UserRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {    
+    {
         $isLogin = $this->is('login');
         $userId  = Auth::check() ? Auth::user()->id : null;
 
-        if($isLogin) {
+        if ($isLogin) {
             return [
                 'email'     => 'required',
                 'password'  => 'required'
@@ -33,10 +34,9 @@ class UserRequest extends FormRequest
             return [
                 'name'      => 'required',
                 'user_name' => 'required|unique:users',
-                'email'     => 'required|email|unique:users,email,' .$userId,
+                'email'     => 'required|email|unique:users,email,' . $userId,
                 'password'  => 'required|min:6'
             ];
         }
-        
     }
 }
