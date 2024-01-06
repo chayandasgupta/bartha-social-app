@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -18,26 +19,6 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// User routes
-// Route::controller(UserController::class)->group(function () {
-//     Route::get('/{user_name}', 'UserController@showProfile')
-//         ->name('profile.show');
-
-//     // Edit Profile
-//     Route::get('/{user_name}/edit', 'UserController@editProfile')
-//         ->name('profile.edit');
-
-//     // Update Profile
-//     Route::put('/{id}', 'UserController@updateProfile')
-//         ->name('profile.update');
-// });
-
-// Route::controller(UserController::class)->group(function () {
-//     Route::get('/{user_name}', 'showProfile')->name('profile.show');
-//     Route::get('/{user_name}/profile', 'editProfile')->name('profile.edit');
-//     Route::put('/user/{id}', 'updateProfile')->name('profile.update');
-// });
 
 Route::prefix('/profile')->group(function () {
     // Show Profile
@@ -55,6 +36,7 @@ Route::prefix('/profile')->group(function () {
 
 // Post routes
 Route::resource('post', PostController::class);
+Route::resource('comments', CommentController::class);
 
 
 require __DIR__ . '/auth.php';

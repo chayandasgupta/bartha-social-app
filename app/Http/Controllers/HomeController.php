@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -16,8 +14,16 @@ class HomeController extends Controller
 
         $posts = DB::table('posts')
             ->join('users', 'posts.user_id', '=', 'users.id')
-            ->select('posts.*', 'users.name', 'users.user_name')
-            ->orderBy('id', 'desc')
+            ->select(
+                'posts.uuid',
+                'posts.description',
+                'posts.user_id',
+                'users.name',
+                'users.user_name',
+                'users.uuid as user_uuid',
+                DB::raw('(SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comment_count')
+            )
+            ->orderBy('posts.id', 'desc')
             ->get();
 
         return view('index', compact('posts'));
