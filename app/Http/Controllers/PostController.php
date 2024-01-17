@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\Post;
+use App\Models\Comment;
 
 class PostController extends Controller
 {
@@ -31,8 +32,8 @@ class PostController extends Controller
     {
         $postData = $request->validated();
         $postData['user_id'] = Auth::user()->id;
-        $postData['uuid'] = Str::uuid();
-        $post = DB::table('posts')->insert($postData);
+        $postData['uuid']    = Str::uuid();
+        $post = Post::create($postData);
 
         if ($post) {
             flash('Post created successfully');
@@ -46,26 +47,17 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $uuid)
     {
-        $post = DB::table('posts')
-            ->join('users', 'posts.user_id', '=', 'users.id')
-            ->select(
-                'posts.*',
-                'users.name',
-                'users.user_name',
-                'users.uuid as user_uuid',
-            )
-            ->where('posts.uuid', $id)
+        $post = Post::withUserAndComments()
+            ->where('uuid', $uuid)
             ->first();
 
         if (!$post) {
             abort(404);
         }
 
-        $postComments = DB::table('comments')
-            ->join('users', 'comments.user_id', '=', 'users.id')
-            ->select('comments.*', 'users.name', 'users.user_name', 'users.uuid as user_uuid')
+        $postComments = Comment::with(['user:id,name,user_name,uuid'])
             ->where('post_id', $post->id)
             ->get();
 
@@ -75,9 +67,9 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $uuid)
     {
-        $post = DB::table('posts')->where('uuid', $id)->first();
+        $post = Post::where('uuid', $uuid)->first();
 
         return view('frontend.posts.edit', compact('post'));
     }
@@ -85,12 +77,10 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StorePostRequest $request, string $id)
+    public function update(StorePostRequest $request, string $uuid)
     {
         $postData = $request->validated();
-        $postUpdate = DB::table('posts')
-            ->where('uuid', $id)
-            ->update($postData);
+        $postUpdate = Post::where('uuid', $uuid)->update($postData);
 
         if ($postUpdate) {
             flash('Post updated successfully');
@@ -98,23 +88,24 @@ class PostController extends Controller
             flash('Post updated failed');
         }
 
-        return redirect()->route('home');
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        $deletePost = DB::table('posts')
-            ->where('uuid', $id)
-            ->delete();
+        $post = Post::where('uuid', $uuid)->first();
 
-        if ($deletePost) {
-            flash('Post deleted successfully');
-        } else {
-            flash()->addWarning('Something went wrong.');
+        if (!$post) {
+            abort(404);
         }
+
+        $post->comments()->delete();
+        $post->delete();
+
+        flash('Post deleted successfully');
 
         return back();
     }

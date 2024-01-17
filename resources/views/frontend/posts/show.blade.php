@@ -11,22 +11,22 @@
           <!-- User Info -->
           <div class="text-gray-900 flex flex-col min-w-0 flex-1">
             <a
-            href="{{route('profile.show', $post->user_uuid)}}"
+            href="{{route('profile.show', $post->user->uuid)}}"
               class="hover:underline font-semibold line-clamp-1">
-              {{ $post->name }}
+              {{ $post->user->name }}
             </a>
 
             <a
-            href="{{route('profile.show', $post->user_uuid)}}"
+            href="{{route('profile.show', $post->user->uuid)}}"
               class="hover:underline text-sm text-gray-500 line-clamp-1">
-              {{ '@' . $post->user_name }}
+              {{ '@' . $post->user->name }}
             </a>
           </div>
           <!-- /User Info -->
         </div>
 
         <!-- Card Action Dropdown -->
-        @if(auth()->check() && auth()->user()->id == $post->user_id)
+        @if(auth()->check() && auth()->user()->id === $post->user->id)
           <div
             class="flex flex-shrink-0 self-center"
             x-data="{ open: false }">
@@ -58,19 +58,25 @@
                 aria-labelledby="user-menu-button"
                 tabindex="-1">
                 <a
-                  href="{{route('profile.show', $post->uuid)}}"
+                  href="{{route('post.edit', $post->uuid)}}"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   role="menuitem"
                   tabindex="-1"
                   id="user-menu-item-0"
                   >Edit</a
                 >
+
+                <form id="de-form-{{ $post->uuid }}" type="submit" action="{{ route('post.destroy', $post->uuid) }}" method="post">
+                  @csrf
+                  @method('DELETE')
+                </form>
                 <a
-                  href="{{route('profile.show', $post->uuid)}}"
+                  href="#"
                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   role="menuitem"
                   tabindex="-1"
                   id="user-menu-item-1"
+                  onclick="event.preventDefault(); document.getElementById('de-form-{{ $post->uuid }}').submit();"
                   >Delete</a
                 >
               </div>
@@ -92,7 +98,7 @@
     <div class="flex items-center gap-2 text-gray-500 text-xs my-2">
       <span class="">6 minutes ago</span>
       <span class="">•</span>
-      <span>{{$postComments ? count($postComments) : 0}} comments</span>
+      <span>{{$post->comments_count}} comments</span>
       <span class="">•</span>
       <span>450 views</span>
     </div>
@@ -158,7 +164,7 @@
 
   <hr />
   <div class="flex flex-col space-y-6">
-    <h1 class="text-lg font-semibold">Comments ({{$postComments ? count($postComments) : 0}})</h1>
+    <h1 class="text-lg font-semibold">Comments ({{$post->comments_count}})</h1>
 
     <!-- Barta User Comments Container -->
     @if(count($postComments) > 0)
@@ -175,15 +181,15 @@
                 <!-- User Info -->
                 <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                   <a
-                    href="{{route('profile.show', $comment->user_uuid)}}"
+                    href="{{route('profile.show', $comment->user->uuid)}}"
                     class="hover:underline font-semibold line-clamp-1">
-                    {{$comment->name}}
+                    {{$comment->user->name}}
                   </a>
 
-                  <a
-                  href="{{route('profile.show', $comment->user_uuid)}}"
+                 <a
+                  href="{{route('profile.show', $comment->user->uuid)}}"
                     class="hover:underline text-sm text-gray-500 line-clamp-1">
-                    {{'@'.$comment->user_name}}
+                    {{'@'.$comment->user->name}}
                   </a>
                 </div>
                 <!-- /User Info -->

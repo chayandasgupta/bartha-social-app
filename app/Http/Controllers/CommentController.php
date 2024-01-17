@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Comment;
 
 class CommentController extends Controller
 {
@@ -33,10 +33,8 @@ class CommentController extends Controller
         ]);
         $input            = $request->only('post_id', 'description');
         $input['user_id'] = auth()->user()->id;
-        $input['created_at'] = DB::raw('NOW()');
-        $input['updated_at'] = DB::raw('NOW()');
+        Comment::create($input);
 
-        DB::table('comments')->insert($input);
         return back();
     }
 
