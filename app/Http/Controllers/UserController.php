@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -18,6 +19,7 @@ class UserController extends Controller
             'user_name',
             'email',
             'bio',
+            'image'
         )->withCount(['posts', 'comments'])
             ->where('users.uuid', $id)
             ->first();
@@ -49,15 +51,24 @@ class UserController extends Controller
 
     public function updateProfile(Request $request, $id)
     {
-        $requestedUserData = $request->only('name', 'user_name', 'password', 'email', 'bio');
+
+        $userUpdate = User::where('uuid', $id)->first();
+        $requestedUserData = $request->only('name', 'user_name', 'password', 'email', 'bio', 'image');
 
         // Check if the password is provided
         if ($request->has('password')) {
             $requestedUserData['password'] = Hash::make($request->password);
         }
 
-        $userUpdate = User::where('uuid', $id)
-            ->update($requestedUserData);
+        if ($request->hasFile('image')) {
+            if ($userUpdate->image) {
+                Storage::delete($userUpdate->image);
+            }
+
+            $requestedUserData['image'] = $request->file('image')->store('public');
+        }
+
+        $userUpdate->update($requestedUserData);
 
         if (!$userUpdate) {
             flash('Profile updating failed.');

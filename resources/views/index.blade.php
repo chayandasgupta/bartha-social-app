@@ -8,7 +8,7 @@
     <div class="flex items-start /space-x-3/">
       {{-- User Avatar  --}}
       <div class="flex-shrink-0">
-        <img class="h-10 w-10 rounded-full object-cover" src="https://avatars.githubusercontent.com/u/55105548"
+        <img class="h-10 w-10 rounded-full object-cover" src="{{ auth()->check() ? Storage::url(auth()->user()->image) : '/empty.jpg' }}"
           alt="Chayan" />
       </div>
       {{-- /User Avatar  --}}
@@ -27,7 +27,7 @@
       <div class="flex gap-4 text-gray-600">
 
         <div>
-          <input type="file" name="picture" id="picture" class="hidden" />
+          <input type="file" name="image" id="picture" class="hidden" />
 
           <label for="picture"
             class="-m-2 flex gap-2 text-xs items-center rounded-full p-2 text-gray-600 hover:text-gray-800 cursor-pointer">
@@ -82,7 +82,7 @@
           <div class="flex-shrink-0">
             <img
               class="h-10 w-10 rounded-full object-cover"
-              src="https://avatars.githubusercontent.com/u/55105548"
+              src="{{ $post->user->image ? Storage::url($post->user->image) : '/empty.jpg' }}"
               alt="Chayan" />
           </div>
 
@@ -162,8 +162,11 @@
         @if (strlen(strip_tags($post->description)) > 400)
           <a href="{{ route('post.show', $post->uuid) }}" class="text-blue-500 text-sm">Read More</a>
         @endif
-
       </p>
+      @foreach ($post->media as $media)
+        <img src="{{ $media->getUrl() }}" alt="" width="220px">
+      @endforeach
+     
     </div>
 
     <div class="flex items-center gap-2 text-gray-500 text-xs my-2">

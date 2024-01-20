@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Post;
 use App\Models\Comment;
+use Illuminate\Http\Request;
+// use Flasher\Laravel\Http\Request;
 
 class PostController extends Controller
 {
@@ -30,10 +32,17 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
+        $image = $request->image;
         $postData = $request->validated();
+        $image = $request->image;
         $postData['user_id'] = Auth::user()->id;
         $postData['uuid']    = Str::uuid();
         $post = Post::create($postData);
+
+        if ($request->hasFile('image')) {
+            $post->addMedia($image)
+                ->toMediaCollection('posts');
+        }
 
         if ($post) {
             flash('Post created successfully');

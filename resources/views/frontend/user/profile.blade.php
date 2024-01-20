@@ -4,13 +4,19 @@
     <section
         class="bg-white border-2 p-8 border-gray-800 rounded-xl min-h-[350px] space-y-8 flex items-center flex-col justify-center">
         <!-- Profile Info -->
-        <div class="flex gap-4 justify-center flex-col text-center items-center">
-        <!-- User Meta -->
-        <div>
-            <h1 class="font-bold md:text-2xl">{{$user->name}}</h1>
-            <p class="text-gray-700">{{$user->bio ?? ''}}</p>
-        </div>
-        <!-- / User Meta -->
+        <div  class="flex gap-4 justify-center flex-col text-center items-center"
+            <div class="relative">
+                <img
+                class="w-32 h-32 rounded-full border-2 border-gray-800"
+                src="{{ $user->image ? Storage::url($user->image) : '/empty.jpg' }}"
+                          alt="{{ $user->name }}" /> 
+            </div>
+            <!-- User Meta -->
+            <div>
+                <h1 class="font-bold md:text-2xl">{{$user->name}}</h1>
+                <p class="text-gray-700">{{$user->bio ?? ''}}</p>
+            </div>
+            <!-- / User Meta -->
         </div>
         <!-- /Profile Info -->
 
@@ -109,8 +115,8 @@
                     <div class="flex-shrink-0">
                         <img
                         class="h-10 w-10 rounded-full object-cover"
-                        src="https://avatars.githubusercontent.com/u/55105548"
-                        alt="Chayan" />
+                        src="{{ $user->image ? Storage::url($user->image) : '/empty.jpg' }}"
+                        alt="{{ $user->name }}" />
                     </div>
 
                     <div class="text-gray-900 flex flex-col min-w-0 flex-1">
@@ -190,6 +196,9 @@
                     @endif
 
                 </p>
+                @foreach ($post->media as $media)
+                    <img src="{{ $media->getUrl() }}" alt="" width="220px">
+                @endforeach
                 </div>
 
                 <div class="flex items-center gap-2 text-gray-500 text-xs my-2">

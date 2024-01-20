@@ -11,7 +11,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "php-flasher/flasher-laravel": "^1.15"
+        "php-flasher/flasher-laravel": "^1.15",
+        "spatie/laravel-medialibrary": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
