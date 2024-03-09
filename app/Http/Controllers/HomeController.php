@@ -2,30 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\Models\Post;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        if (!Auth()->check()) {
-            return redirect()->route('login');
-        }
+        return view('index');
+    }
 
-        $posts = DB::table('posts')
-            ->join('users', 'posts.user_id', '=', 'users.id')
-            ->select(
-                'posts.uuid',
-                'posts.description',
-                'posts.user_id',
-                'users.name',
-                'users.user_name',
-                'users.uuid as user_uuid',
-                DB::raw('(SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comment_count')
-            )
-            ->orderBy('posts.id', 'desc')
-            ->get();
+    public function fetchPost(Request $request)
+    {
+        $nextCursor = $request->input('next_cursor') ?? null;
+        $posts = Post::withUserAndComments()
+            ->with('media')
+            ->orderByDesc('id')
+            ->cursorPaginate(15, ['*'], 'cursor', $nextCursor);
 
-        return view('index', compact('posts'));
+        return response()->json($posts);
     }
 }

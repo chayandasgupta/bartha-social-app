@@ -18,25 +18,23 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/fetch-posts', [HomeController::class, 'fetchPost'])->name('fetch.post');
 
-Route::prefix('/profile')->group(function () {
-    // Show Profile
-    Route::get('/{id}', [UserController::class, 'showProfile'])
-        ->name('profile.show');
+    Route::prefix('/profile')->group(function () {
+        Route::get('/{id}', [UserController::class, 'showProfile'])
+            ->name('profile.show');
+        Route::get('/{id}/edit',  [UserController::class, 'editProfile'])
+            ->name('profile.edit');
+        Route::put('/{id}', [UserController::class, 'updateProfile'])
+            ->name('profile.update');
+    });
 
-    // Edit Profile
-    Route::get('/{id}/edit',  [UserController::class, 'editProfile'])
-        ->name('profile.edit');
-
-    // Update Profile
-    Route::put('/{id}', [UserController::class, 'updateProfile'])
-        ->name('profile.update');
+    // Post routes
+    Route::resource('post', PostController::class);
+    Route::resource('comments', CommentController::class);
 });
-
-// Post routes
-Route::resource('post', PostController::class);
-Route::resource('comments', CommentController::class);
 
 
 require __DIR__ . '/auth.php';

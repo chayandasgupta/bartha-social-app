@@ -3,45 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     public function getUserData($id)
     {
-        return DB::table('users')
-            ->select(
-                'id',
-                'uuid',
-                'name',
-                'user_name',
-                'email',
-                'bio',
-                DB::raw('(SELECT COUNT(*) FROM posts WHERE user_id = users.id) as totalPosts'),
-                DB::raw('(SELECT COUNT(*) FROM comments WHERE user_id = users.id) as totalComments')
-            )
+        $user = User::select(
+            'id',
+            'uuid',
+            'name',
+            'user_name',
+            'email',
+            'bio',
+            'image'
+        )->withCount(['posts', 'comments'])
             ->where('users.uuid', $id)
             ->first();
+        return $user;
     }
 
     public function showProfile($id)
     {
         $user = $this->getUserData($id);
-        if ($user) {
-            $userPosts = DB::table('posts')
-                ->select(
-                    'posts.*',
-                    DB::raw('(SELECT COUNT(*) FROM comments WHERE post_id = posts.id) as comment_count')
-                )
-                ->orderBy('id', 'desc')
-                ->where('user_id', $user->id)
-                ->get();
 
-            $user->posts = $userPosts;
+        if (!$user) {
+            abort(404);
         }
 
-        return view('frontend.user.profile', compact('user'));
+        $userPosts = Post::withCount('comments')
+            ->orderBy('id', 'desc')
+            ->where('user_id', $user->id)
+            ->get();
+
+        return view('frontend.user.profile', compact('user', 'userPosts'));
     }
 
     public function editProfile($id)
@@ -53,22 +51,33 @@ class UserController extends Controller
 
     public function updateProfile(Request $request, $id)
     {
-        $requestedUserData = $request->only('name', 'user_name', 'password', 'email', 'bio');
+
+        $userUpdate = User::where('uuid', $id)->first();
+        $requestedUserData = $request->only('name', 'user_name', 'password', 'email', 'bio', 'image');
 
         // Check if the password is provided
         if ($request->has('password')) {
             $requestedUserData['password'] = Hash::make($request->password);
         }
 
-        $userUpdate = DB::table('users')
-            ->where('uuid', $id)
-            ->update($requestedUserData);
+
+        $userUpdate->update($requestedUserData);
+        if ($request->hasFile('image')) {
+            if ($userUpdate->image) {
+                Storage::delete($userUpdate->image);
+            }
+
+            $userUpdate->addMedia($requestedUserData['image'])
+                ->toMediaCollection('users');
+            // $requestedUserData['image'] = $request->file('image')->store('public');
+        }
+
 
         if (!$userUpdate) {
             flash('Profile updating failed.');
-        } else {
-            flash('Profile updated successfully.');
         }
+
+        flash('Profile updated successfully.');
 
         return back();
     }

@@ -4,13 +4,19 @@
     <section
         class="bg-white border-2 p-8 border-gray-800 rounded-xl min-h-[350px] space-y-8 flex items-center flex-col justify-center">
         <!-- Profile Info -->
-        <div class="flex gap-4 justify-center flex-col text-center items-center">
-        <!-- User Meta -->
-        <div>
-            <h1 class="font-bold md:text-2xl">{{$user->name}}</h1>
-            <p class="text-gray-700">{{$user->bio ?? ''}}</p>
-        </div>
-        <!-- / User Meta -->
+        <div  class="flex gap-4 justify-center flex-col text-center items-center"
+            <div class="relative">
+                <img
+                class="w-32 h-32 rounded-full border-2 border-gray-800"
+                src="{{ $user->image ? Storage::url($user->image) : '/empty.jpg' }}"
+                          alt="{{ $user->name }}" /> 
+            </div>
+            <!-- User Meta -->
+            <div>
+                <h1 class="font-bold md:text-2xl">{{$user->name}}</h1>
+                <p class="text-gray-700">{{$user->bio ?? ''}}</p>
+            </div>
+            <!-- / User Meta -->
         </div>
         <!-- /Profile Info -->
 
@@ -19,13 +25,13 @@
         class="flex flex-row gap-16 justify-center text-center items-center">
             <!-- Total Posts Count -->
             <div class="flex flex-col justify-center items-center">
-                <h4 class="sm:text-xl font-bold">{{ $user->totalPosts ?? 0 }}</h4>
+                <h4 class="sm:text-xl font-bold">{{ $user->posts_count }}</h4>
                 <p class="text-gray-600">Posts</p>
             </div>
 
             <!-- Total Comments Count -->
             <div class="flex flex-col justify-center items-center">
-                <h4 class="sm:text-xl font-bold">{{ $user->totalComments ?? 0 }}</h4>
+                <h4 class="sm:text-xl font-bold">{{ $user->comments_count }} </h4>
                 <p class="text-gray-600">Comments</p>
             </div>
         </div>
@@ -100,8 +106,8 @@
 
     <!-- User Specific Posts Feed -->
       <!-- Barta Card -->
-      @if($user->posts && count($user->posts) > 0)
-        @foreach ($user->posts as $post)
+      @if($userPosts && count($userPosts) > 0)
+        @foreach ($userPosts as $post)
             <article class="bg-white border-2 border-black rounded-lg shadow mx-auto max-w-none px-4 py-5 sm:px-6">
                 <header>
                 <div class="flex items-center justify-between">
@@ -109,17 +115,17 @@
                     <div class="flex-shrink-0">
                         <img
                         class="h-10 w-10 rounded-full object-cover"
-                        src="https://avatars.githubusercontent.com/u/55105548"
-                        alt="Chayan" />
+                        src="{{ $user->image ? Storage::url($user->image) : '/empty.jpg' }}"
+                        alt="{{ $user->name }}" />
                     </div>
 
                     <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                         <a
-                        href="{{route('profile.show', $user->uuid)}}"
+                        href="{{route('profile.show', $post->uuid)}}"
                         class="hover:underline font-semibold line-clamp-1">
-                            {{$user->name ?? ''}} 
+                            {{$user->name ?? ''}}  
                         </a>
-
+                        
                         <a
                         href="{{route('profile.show', $user->uuid)}}"
                         class="hover:underline text-sm text-gray-500 line-clamp-1">
@@ -190,6 +196,9 @@
                     @endif
 
                 </p>
+                @foreach ($post->media as $media)
+                    <img src="{{ $media->getUrl() }}" alt="" width="220px">
+                @endforeach
                 </div>
 
                 <div class="flex items-center gap-2 text-gray-500 text-xs my-2">
@@ -234,7 +243,7 @@
                                 d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z" />
                             </svg>
 
-                            <p>{{ $post->comment_count }}</p>
+                            <p>{{ $post->comments_count }}</p>
                         </a>
                     {{-- &lt;!&ndash; /Comment Button &ndash;&gt; --}}
                     </div>
