@@ -60,15 +60,18 @@ class UserController extends Controller
             $requestedUserData['password'] = Hash::make($request->password);
         }
 
+
+        $userUpdate->update($requestedUserData);
         if ($request->hasFile('image')) {
             if ($userUpdate->image) {
                 Storage::delete($userUpdate->image);
             }
 
-            $requestedUserData['image'] = $request->file('image')->store('public');
+            $userUpdate->addMedia($requestedUserData['image'])
+                ->toMediaCollection('users');
+            // $requestedUserData['image'] = $request->file('image')->store('public');
         }
 
-        $userUpdate->update($requestedUserData);
 
         if (!$userUpdate) {
             flash('Profile updating failed.');

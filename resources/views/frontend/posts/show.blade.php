@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<section id="newsfeed" class="space-y-6">
+<section id="newsfeeds" class="space-y-6">
   <!-- Barta Card -->
   <article
     class="bg-white border-2 border-black rounded-lg shadow mx-auto max-w-none px-4 py-5 sm:px-6">

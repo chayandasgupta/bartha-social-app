@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StorePostRequest extends FormRequest
@@ -22,8 +23,8 @@ class StorePostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'description' => 'nullable',
-            'image'        => 'nullable | mimes:jpg,bmp,png'
+            'description' => 'required',
+            'image'       => ['nullable', File::image()->max('8mb')],
         ];
     }
 }
