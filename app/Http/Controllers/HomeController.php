@@ -7,19 +7,26 @@ use App\Models\Post;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
-    {
-        return view('index');
-    }
-
-    public function fetchPost(Request $request)
+    /**
+     * Handle the incoming request.
+     */
+    public function __invoke(Request $request)
     {
         $nextCursor = $request->input('next_cursor') ?? null;
-        $posts = Post::withUserAndComments()
-            ->with('media')
+        $posts = Post::select([
+            'id',
+            'description',
+            'uuid',
+            'user_id'
+        ])->withCount('comments')
+            ->with(['user:id,name,user_name,uuid,image', 'user.media'])
             ->orderByDesc('id')
             ->cursorPaginate(15, ['*'], 'cursor', $nextCursor);
 
-        return response()->json($posts);
+        if ($request->wantsJson()) {
+            return $posts;
+        }
+
+        return view('index', compact('posts'));
     }
 }

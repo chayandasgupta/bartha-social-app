@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
@@ -19,8 +18,8 @@ use App\Http\Controllers\UserController;
 */
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/fetch-posts', [HomeController::class, 'fetchPost'])->name('fetch.post');
+    Route::get('/', HomeController::class)->name('home');
+    // Route::get('/fetch-posts', [HomeController::class, 'fetchPost'])->name('fetch.post');
 
     Route::prefix('/profile')->group(function () {
         Route::get('/{id}', [UserController::class, 'showProfile'])
