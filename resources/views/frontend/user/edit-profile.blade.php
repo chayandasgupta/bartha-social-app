@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <section>
-        <form action="{{ route('profile.update', $user->uuid) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('profile.update', $user->id) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="space-y-12">

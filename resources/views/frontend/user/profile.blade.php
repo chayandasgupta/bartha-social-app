@@ -38,9 +38,9 @@
         <!-- /Profile Stats -->
 
         <!-- Edit Profile Button (Only visible to the profile owner) -->
-        @if(auth()->user()->uuid == $user->uuid)
+        @if(auth()->user()->id == $user->id)
             <a
-            href="{{ route('profile.edit', $user->uuid) }}"
+            href="{{ route('profile.edit', $user->id) }}"
             type="button"
             class="-m-2 flex gap-2 items-center rounded-full px-4 py-2 font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700">
             <svg
@@ -63,7 +63,7 @@
     <!-- /Cover Container -->
     
     <!-- Barta Create Post Card -->
-    @if(auth()->user()->uuid == $user->uuid)
+    @if(auth()->user()->id == $user->id)
         <form
         method="POST"
         action="{{route('post.store')}}"
@@ -121,13 +121,13 @@
 
                     <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                         <a
-                        href="{{route('profile.show', $post->uuid)}}"
+                        href="{{route('profile.show', $post->id)}}"
                         class="hover:underline font-semibold line-clamp-1">
                             {{$user->name ?? ''}}  
                         </a>
                         
                         <a
-                        href="{{route('profile.show', $user->uuid)}}"
+                        href="{{route('profile.show', $user->id)}}"
                         class="hover:underline text-sm text-gray-500 line-clamp-1">
                         {{'@'.$user->user_name ?? ''}}
                         </a>
@@ -164,13 +164,13 @@
                                 aria-orientation="vertical"
                                 aria-labelledby="user-menu-button"
                                 tabindex="-1">
-                                <a href="{{ route('post.edit', $post->uuid) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                <a href="{{ route('post.edit', $post->id) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                         role="menuitem"
                                         tabindex="-1"
                                         id="user-menu-item-0"
                                 >Edit</a>
                                 
-                                <form id="de-form-{{ $post->uuid }}" type="submit" action="{{ route('post.destroy', $post->uuid) }}" method="post">
+                                <form id="de-form-{{ $post->id }}" type="submit" action="{{ route('post.destroy', $post->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
                                 </form>
@@ -178,7 +178,7 @@
                                 <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 role="menuitem"
                                 tabindex="-1"
-                                id="user-menu-item-1" onclick="event.preventDefault(); document.getElementById('de-form-{{ $post->uuid }}').submit();">Delete</a>
+                                id="user-menu-item-1" onclick="event.preventDefault(); document.getElementById('de-form-{{ $post->id }}').submit();">Delete</a>
                             </div>
                             <!-- Dropdown menu end -->
                         </div>
@@ -192,7 +192,7 @@
                 <p>
                     {{ Str::limit(strip_tags($post->description), 400) }}
                     @if (strlen(strip_tags($post->description)) > 400)
-                    <a href="{{ route('post.show', $post->uuid) }}" class="text-blue-500 text-sm">Read More</a>
+                    <a href="{{ route('post.show', $post->id) }}" class="text-blue-500 text-sm">Read More</a>
                     @endif
 
                 </p>
@@ -234,7 +234,7 @@
                     {{-- &lt;!&ndash; /Heart Button &ndash;&gt;
 
                     &lt;!&ndash; Comment Button &ndash;&gt; --}}
-                    <a href="{{ route('post.show', $post->uuid) }}" type="button"
+                    <a href="{{ route('post.show', $post->id) }}" type="button"
                             class="-m-2 flex gap-2 text-xs items-center rounded-full p-2 text-gray-600 hover:text-gray-800">
                             <span class="sr-only">Comment</span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"

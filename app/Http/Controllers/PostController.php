@@ -51,7 +51,7 @@ class PostController extends Controller
     public function show(string $uuid)
     {
         $post = Post::withUserAndComments()
-            ->where('uuid', $uuid)
+            ->where('id', $uuid)
             ->first();
 
         if (!$post) {
@@ -70,7 +70,7 @@ class PostController extends Controller
      */
     public function edit(string $uuid)
     {
-        $post = Post::where('uuid', $uuid)->first();
+        $post = Post::where('id', $uuid)->first();
 
         return view('frontend.posts.edit', compact('post'));
     }
@@ -81,7 +81,7 @@ class PostController extends Controller
     public function update(StorePostRequest $request, string $uuid)
     {
         $postData = $request->validated();
-        $postUpdate = Post::where('uuid', $uuid)->update($postData);
+        $postUpdate = Post::where('id', $uuid)->update($postData);
 
         if ($postUpdate) {
             flash('Post updated successfully');
@@ -97,7 +97,7 @@ class PostController extends Controller
      */
     public function destroy(string $uuid)
     {
-        $post = Post::where('uuid', $uuid)->first();
+        $post = Post::where('id', $uuid)->first();
 
         if (!$post) {
             abort(404);

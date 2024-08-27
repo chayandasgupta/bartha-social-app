@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<form method="POST" action="{{ route('post.update', $post->uuid) }}" enctype="multipart/form-data"
+<form method="POST" action="{{ route('post.update', $post->id) }}" enctype="multipart/form-data"
   class="bg-white border-2 border-black rounded-lg shadow mx-auto max-w-none px-4 py-5 sm:px-6 space-y-3">
   @csrf
   @method('PUT')

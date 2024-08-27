@@ -14,14 +14,12 @@ class UserController extends Controller
     {
         $user = User::select(
             'id',
-            'uuid',
             'name',
             'user_name',
             'email',
-            'bio',
-            'image'
+            'bio'
         )->withCount(['posts', 'comments'])
-            ->where('users.uuid', $id)
+            ->where('users.id', $id)
             ->first();
         return $user;
     }
@@ -52,7 +50,7 @@ class UserController extends Controller
     public function updateProfile(Request $request, $id)
     {
 
-        $userUpdate = User::where('uuid', $id)->first();
+        $userUpdate = User::where('id', $id)->first();
         $requestedUserData = $request->only('name', 'user_name', 'password', 'email', 'bio', 'image');
 
         // Check if the password is provided

@@ -11,16 +11,14 @@ class HomeController extends Controller
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
-    {
+    { 
         $nextCursor = $request->input('next_cursor') ?? null;
         $posts = Post::select([
             'id',
             'description',
-            'uuid',
             'user_id'
         ])->withCount('comments')
-            ->with(['user:id,name,user_name,uuid,image', 'user.media'])
-            ->orderByDesc('id')
+            ->with(['user:id,name,user_name', 'user.media'])
             ->cursorPaginate(15, ['*'], 'cursor', $nextCursor);
 
         if ($request->wantsJson()) {
