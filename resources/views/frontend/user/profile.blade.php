@@ -204,7 +204,10 @@
                 <div class="flex items-center gap-2 text-gray-500 text-xs my-2">
                 <span class="">6 minutes ago</span>
                 <span class="">•</span>
-                <span>450 views</span>
+                <span
+                    >{{ $post->view_count }}
+                    {{ $post->view_count > 1 ? "views" : "view" }}</span
+                >
                 </div>
 
                 <footer class="border-t border-gray-200 pt-2">

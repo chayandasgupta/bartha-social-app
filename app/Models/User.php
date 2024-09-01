@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Constants\MediaCollectionName;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -17,6 +18,8 @@ class User extends Authenticatable implements HasMedia
     use HasApiTokens, HasFactory, HasUuids, Notifiable;
     use InteractsWithMedia;
 
+    const DEFAULT_IMAGE_PATH = '/empty.jpg';
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -51,7 +54,26 @@ class User extends Authenticatable implements HasMedia
         'password' => 'hashed',
     ];
 
+    public function isAuthor(): bool
+    {
+        return auth()->id() === $this->id;
+    }
 
+    public function firstName(): string
+    {
+        return str()->of($this->name)->before(' ')->title();
+    }
+
+    public function fullName(): string
+    {
+        return str()->of($this->name)->title();
+    }
+
+    public function getProfileImage()
+    {
+        return $this->getFirstMediaUrl(MediaCollectionName::PROFILE_IMAGE);
+    }
+    
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
@@ -60,5 +82,14 @@ class User extends Authenticatable implements HasMedia
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection(MediaCollectionName::PROFILE_IMAGE)
+            ->singleFile()
+            ->useDisk('avatar')
+            ->useFallbackUrl(self::DEFAULT_IMAGE_PATH);
     }
 }

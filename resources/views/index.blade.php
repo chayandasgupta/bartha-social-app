@@ -9,7 +9,7 @@
     <div class="flex items-start /space-x-3/">
       {{-- User Avatar  --}}
       <div class="flex-shrink-0">
-        <img class="h-10 w-10 rounded-full object-cover" src="{{ auth()->check() ? Storage::url(auth()->user()->image) : '/empty.jpg' }}"
+        <img class="h-10 w-10 rounded-full object-cover" src="/empty.jpg "
           alt="User Avatar" />
       </div>
       {{-- /User Avatar  --}}
@@ -98,3 +98,4 @@
   }
 </script>
 @endsection
+  

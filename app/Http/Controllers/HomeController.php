@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Http\Resources\PostCollection;
 
 class HomeController extends Controller
 {
@@ -11,15 +12,21 @@ class HomeController extends Controller
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
-    { 
+    {
         $nextCursor = $request->input('next_cursor') ?? null;
-        $posts = Post::select([
+
+        $allPosts = Post::select([
             'id',
             'description',
-            'user_id'
+            'user_id',
+            'view_count',
+            'created_at'
         ])->withCount('comments')
-            ->with(['user:id,name,user_name', 'user.media'])
-            ->cursorPaginate(15, ['*'], 'cursor', $nextCursor);
+        ->with(['user:id,name,user_name', 'user.media'])
+        ->with('media')
+        ->cursorPaginate(15, ['*'], 'cursor', $nextCursor);
+
+        $posts = PostCollection::make($allPosts);
 
         if ($request->wantsJson()) {
             return $posts;
@@ -27,4 +34,5 @@ class HomeController extends Controller
 
         return view('index', compact('posts'));
     }
+
 }

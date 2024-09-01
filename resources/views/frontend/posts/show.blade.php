@@ -100,7 +100,7 @@
       <span class="">•</span>
       <span>{{$post->comments_count}} comments</span>
       <span class="">•</span>
-      <span>450 views</span>
+      <span>{{$post->view_count}} {{$post->view_count > 1 ? "views" : "view"}}</span>
     </div>
 
     <hr class="my-6" />
@@ -167,12 +167,12 @@
     <h1 class="text-lg font-semibold">Comments ({{$post->comments_count}})</h1>
 
     <!-- Barta User Comments Container -->
-    @if(count($postComments) > 0)
+    @if(count($post->comments) > 0)
       <article
         class="bg-white border-2 border-black rounded-lg shadow mx-auto max-w-none px-4 py-2 sm:px-6 min-w-full divide-y">
         <!-- Comments -->
 
-        @foreach($postComments as $comment)
+        @foreach($post->comments as $comment)
         <div class="py-4">
           <!-- Barta User Comments Top -->
           <header>
@@ -204,7 +204,7 @@
 
           <!-- Date Created -->
           <div class="flex items-center gap-2 text-gray-500 text-xs">
-            <span class="">6m ago</span>
+            <span class="">{{ $comment->created_at->diffForHumans() }}</span>
           </div>
         </div>
         @endforeach

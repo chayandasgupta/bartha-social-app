@@ -12,38 +12,37 @@
                         <div class="flex-shrink-0">
                             <img
                                 class="h-10 w-10 rounded-full object-cover"
-                                v-for="(media, index) in post.user.media"
-                                :key="index"
-                                :src="media.original_url"
-                                :alt="media.alt"
+                                :src="post?.user?.profile_image"
+                                alt="AVATAR"
                             />
                         </div>
 
                         <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                             <a
-                                :href="'/profile/' + post.user.id"
+                                :href="'/profile/' + post?.user?.id"
                                 class="hover:underline font-semibold line-clamp-1"
                             >
-                                {{ post.user.name || "" }}
+                                {{ post?.user?.name || "" }}
                             </a>
-
                             <a
-                                :href="'/profile/' + post.user.id"
+                                :href="'/profile/' + post?.user?.id"
                                 class="hover:underline text-sm text-gray-500 line-clamp-1"
                             >
-                                {{ "@" + post.user.user_name || "" }}
+                                {{ "@" + post?.user?.user_name || "" }}
                             </a>
                         </div>
                     </div>
 
+                    <!-- Card Action Dropdown -->
                     <div
-                        v-if="isCurrentUser(post.user_id)"
+                        v-if="post.can.edit && post.can.delete"
                         class="flex flex-shrink-0 self-center"
-                        @click="toggleOptions(post.id)"
+                        x-data="{ open: false }"
                     >
                         <div class="relative inline-block text-left">
                             <div>
                                 <button
+                                    x-on:click="open = !open"
                                     type="button"
                                     class="-m-2 flex items-center rounded-full p-2 text-gray-400 hover:text-gray-600"
                                     id="menu-0-button"
@@ -62,38 +61,42 @@
                                 </button>
                             </div>
 
+                            <!-- Dropdown menu -->
                             <div
-                                v-if="openOptions === post.id"
+                                x-show="open"
+                                x-on:click.away="open = false"
                                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                role="menu"
+                                aria-orientation="vertical"
+                                aria-labelledby="user-menu-button"
+                                tabindex="-1"
                             >
                                 <a
-                                    :href="'/post/edit/' + post.id"
+                                    :href="'/post/' + post.id + '/edit'"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     role="menuitem"
                                     tabindex="-1"
                                     id="user-menu-item-0"
                                     >Edit</a
                                 >
-
-                                <a
-                                    href="#"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                    role="menuitem"
-                                    tabindex="-1"
-                                    id="user-menu-item-1"
-                                    @click.prevent="deletePost(post.id)"
-                                    >Delete</a
+                                <button
+                                    @click="deletePost"
+                                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                    type="submit"
                                 >
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     </div>
+                    <!-- /Card Action Dropdown -->
                 </div>
             </header>
 
             <div class="py-4 text-gray-700 font-normal">
                 <p>
                     {{
-                        post.description.length > 200
+                        post?.description?.length > 200
                             ? post.description.slice(0, 200) + "..."
                             : post.description
                     }}
@@ -105,18 +108,20 @@
                     >Read More</a
                 >
                 <img
-                    v-for="(media, index) in post.media"
-                    :key="index"
-                    :src="media.original_url"
-                    :alt="media.alt"
-                    width="220px"
+                    :src="post.post_image"
+                    class="object-cover rounded-md mt-3"
+                    alt=""
+                    style="width: 200px"
                 />
             </div>
 
             <div class="flex items-center gap-2 text-gray-500 text-xs my-2">
-                <span>6 minutes ago</span>
+                <span>{{ post.created_at }}</span>
                 <span>•</span>
-                <span>450 views</span>
+                <span
+                    >{{ post.view_count }}
+                    {{ post.view_count > 1 ? "views" : "view" }}</span
+                >
             </div>
 
             <footer class="border-t border-gray-200 pt-2">
@@ -231,12 +236,14 @@ export default {
                     params: { next_cursor: this.nextCursor },
                 })
                 .then((response) => {
+                    console.log("response: ", response.data.data);
                     this.nextCursor = response.data.next_cursor;
                     if (!this.nextCursor) {
                         this.noMorePosts = true;
                     }
                     this.posts = this.posts.concat(response.data.data);
                     this.loading = false;
+                    console.log("thisposts", this.posts);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -249,9 +256,6 @@ export default {
                     console.log("scroll");
                 });
             });
-        },
-        isCurrentUser(userId) {
-            return userId === 1;
         },
         toggleOptions(postId) {
             this.openOptions = this.openOptions === postId ? null : postId;

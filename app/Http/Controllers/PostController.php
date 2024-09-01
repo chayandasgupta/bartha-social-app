@@ -48,30 +48,21 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $uuid)
+    public function show(Post $post)
     {
-        $post = Post::withUserAndComments()
-            ->where('id', $uuid)
-            ->first();
-
-        if (!$post) {
-            abort(404);
-        }
-
-        $postComments = Comment::with(['user:id,name,user_name,uuid'])
-            ->where('post_id', $post->id)
-            ->get();
-
-        return view('frontend.posts.show', compact('post', 'postComments'));
+        $post->update(['view_count' => $post->view_count + 1]);
+        $post->load([
+            "user:id,name,user_name",
+            'comments:id,description,user_id,post_id,created_at',
+        ])->loadCount(['comments']);
+        return view('frontend.posts.show', compact('post'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $uuid)
+    public function edit(Post $post)
     {
-        $post = Post::where('id', $uuid)->first();
-
         return view('frontend.posts.edit', compact('post'));
     }
 
