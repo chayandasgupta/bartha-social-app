@@ -86,19 +86,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $uuid)
+    public function destroy(Post $post)
     {
-        $post = Post::where('id', $uuid)->first();
-
-        if (!$post) {
-            abort(404);
-        }
-
-        $post->comments()->delete();
         $post->delete();
 
-        flash('Post deleted successfully');
+        flash('Post has been deleted successfully');
 
-        return back();
+        return response()->json(['message' => 'Post deleted successfully'], 200);
     }
 }

@@ -80,7 +80,7 @@
                                     >Edit</a
                                 >
                                 <button
-                                    @click="deletePost"
+                                    @click="confirmDeletePost(post.id)"
                                     class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                     type="submit"
                                 >
@@ -260,8 +260,21 @@ export default {
         toggleOptions(postId) {
             this.openOptions = this.openOptions === postId ? null : postId;
         },
-        deletePost(postid) {
-            // Implement logic to delete the post
+        confirmDeletePost(postId) {
+            if (confirm("Are you sure you want to delete this post?")) {
+                this.deletePost(postId);
+            }
+        },
+        deletePost(postId) {
+            console.log("deleting post: ", postId);
+            axios
+                .delete(`/post/${postId}`)
+                .then(() => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error deleting post:", error);
+                });
         },
     },
     destroyed() {
