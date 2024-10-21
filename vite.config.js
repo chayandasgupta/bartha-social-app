@@ -6,7 +6,14 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
     plugins: [
-        vue(),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
+        }),
         laravel({
             input: [
                 'resources/css/app.css',

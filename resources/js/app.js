@@ -12,9 +12,11 @@ import Alpine from 'alpinejs';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
-
+import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { Ziggy } from './ziggy.js';
 window.Alpine = Alpine;
 Alpine.start();
+
 
 createInertiaApp({
   // resolve: name => {
@@ -25,6 +27,7 @@ createInertiaApp({
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
+      .use(ZiggyVue, Ziggy)
       .mount(el)
   },
 })
