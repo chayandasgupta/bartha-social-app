@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Application;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +18,9 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', HomeController::class)->name('home');
 
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/', HomeController::class)->name('home');
-//     // Route::get('/fetch-posts', [HomeController::class, 'fetchPost'])->name('fetch.post');
 
 //     Route::prefix('/profile')->group(function () {
 //         Route::get('/{id}', [UserController::class, 'showProfile'])
@@ -37,4 +37,20 @@ Route::get('/', HomeController::class)->name('home');
 // });
 
 
-require __DIR__ . '/auth.php';
+// require __DIR__ . '/auth.php';
+
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('home');
+
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
+
+require __DIR__.'/auth.php';

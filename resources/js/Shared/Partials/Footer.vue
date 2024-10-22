@@ -1,5 +1,5 @@
 <template>
-    <footer class="shadow bg-black mt-10">
+    <footer class="shadow bg-black">
         <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
             <div class="sm:flex sm:items-center sm:justify-between">
                 <a :href="route('home')" class="flex items-center mb-4 sm:mb-0">
@@ -46,6 +46,5 @@
 
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-
 const { app_name, current_year } = usePage().props;
 </script>

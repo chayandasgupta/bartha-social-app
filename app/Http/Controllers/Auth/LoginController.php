@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
@@ -23,7 +24,7 @@ class LoginController extends Controller
 
       // return redirect()->intended('home');
       flash('Successfully loged in.');
-      return redirect('/');
+      return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     return back()->withErrors([

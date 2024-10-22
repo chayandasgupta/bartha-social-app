@@ -205,7 +205,6 @@
 
 <script setup>
 import { Link, useForm, usePage } from "@inertiajs/vue3";
-import { route } from "ziggy-js";
 
 // import Notiotification.vue";
 

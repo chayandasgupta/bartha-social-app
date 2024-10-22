@@ -11,17 +11,17 @@
         />
     </Head>
 
-    <body class="bg-gray-100">
-        <header>
-            <Navigation />
-        </header>
+    <header>
+        <Navigation />
+    </header>
 
-        <main class="max-w-xl mx-auto space-y-8 mt-8 px-2 md:px-0 min-h-screen">
-            <slot></slot>
-        </main>
+    <main
+        class="container max-w-xl mx-auto space-y-8 my-8 px-2 md:px-0 min-h-screen"
+    >
+        <slot></slot>
+    </main>
 
-        <Footer />
-    </body>
+    <Footer />
 </template>
 
 <script setup>
