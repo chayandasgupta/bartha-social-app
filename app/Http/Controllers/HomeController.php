@@ -2,38 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Http\Request;
 use App\Http\Resources\PostCollection;
 
 class HomeController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
-        return inertia('Home');
-        // $nextCursor = $request->input('next_cursor') ?? null;
-
-        // $allPosts = Post::select([
+        // $posts = Post::select([
         //     'id',
-        //     'description',
+        //     'body',
         //     'user_id',
         //     'view_count',
-        //     'created_at'
-        // ])->withCount('comments')
-        // ->with(['user:id,name,user_name', 'user.media'])
-        // ->with('media')
-        // ->cursorPaginate(15, ['*'], 'cursor', $nextCursor);
+        //     'created_at',
+        // ])->withCount(['comments', 'likes'])
+        //     ->with(['user:id,name,username', 'likes:id,user_id,post_id', 'likes.user'])
+        //     ->orderByDesc('id')
+        //     ->cursorPaginate(10);
 
-        // $posts = PostCollection::make($allPosts);
+        // $postsJson = PostCollection::make($posts);
 
         // if ($request->wantsJson()) {
-        //     return $posts;
+        //     return $postsJson;
         // }
 
-        // return view('index', compact('posts'));
+        return inertia()->render('Home');
     }
-
 }

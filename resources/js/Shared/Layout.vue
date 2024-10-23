@@ -11,21 +11,21 @@
         />
     </Head>
 
-    <header>
+    <body class="bg-gray-100">
         <Navigation />
-    </header>
 
-    <main
-        class="container max-w-xl mx-auto space-y-8 my-8 px-2 md:px-0 min-h-screen"
-    >
-        <slot></slot>
-    </main>
+        <main
+            class="container max-w-xl mx-auto space-y-8 mt-8 px-2 md:px-0 min-h-screen"
+        >
+            <slot></slot>
+        </main>
 
-    <Footer />
+        <Footer />
+    </body>
 </template>
 
 <script setup>
+import Footer from "@/Shared/Footer.vue";
+import Navigation from "@/Shared/Nav.vue";
 import { Head } from "@inertiajs/vue3";
-import Footer from "../Shared/Partials/Footer.vue";
-import Navigation from "../Shared/Partials/Nav.vue";
 </script>

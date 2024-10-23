@@ -28,6 +28,9 @@
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            {{-- Message for session data --}}
+            @include('partials.flash-message')
+
             @yield('content')
         </div>
     </div>

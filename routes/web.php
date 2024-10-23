@@ -1,12 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\UserController;
-use Illuminate\Foundation\Application;
-use Inertia\Inertia;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,38 +17,20 @@ use Inertia\Inertia;
 |
 */
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/', HomeController::class)->name('home');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store']);
 
-//     Route::prefix('/profile')->group(function () {
-//         Route::get('/{id}', [UserController::class, 'showProfile'])
-//             ->name('profile.show');
-//         Route::get('/{id}/edit',  [UserController::class, 'editProfile'])
-//             ->name('profile.edit');
-//         Route::put('/{id}', [UserController::class, 'updateProfile'])
-//             ->name('profile.update');
-//     });
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login-post');
+});
 
-//     // Post routes
-//     Route::resource('post', PostController::class);
-//     Route::resource('comments', CommentController::class);
-// });
-
-
-// require __DIR__ . '/auth.php';
-
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('home');
+Route::get('/', HomeController::class)->name('home');
 
 // Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
+//     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
-require __DIR__.'/auth.php';
+Route::middleware('auth')->group(function () {
+    Route::get('/', HomeController::class)->name('home');
+});
